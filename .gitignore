@@ -1,0 +1,7 @@
+node_modules
+.env
+ormconfig.json
+yarn.lock
+yarn-error.log
+src/database
+public
