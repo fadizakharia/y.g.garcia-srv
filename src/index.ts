@@ -2,11 +2,12 @@ import "reflect-metadata";
 import express, { Express } from "express";
 import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
-
+import { json } from "body-parser";
 import * as dotenv from "dotenv";
 // const corsOption = { origin: "http://localhost:3000", credentials: true };
 import { createSchema } from "./util/buildSchema";
 import { createConnection } from "typeorm";
+import { graphqlUploadExpress } from "graphql-upload";
 
 // import tokenValidator from "./util/tokenValidator";
 
@@ -32,20 +33,13 @@ const main = async () => {
   });
 
   await apolloServer.start();
+  app.use(cors());
+  app.use("/graphql", json());
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000 }));
   apolloServer.applyMiddleware({
     app,
-    cors: {
-      ...cors({
-        origin: [
-          "http://localhost:3000",
-          "http://localhost:4000",
-          "http://localhost:5000",
-        ],
-        credentials: true,
-      }),
-    },
+    cors: true,
   });
-  app.use(cors());
   app.listen(PORT, () => {
     console.log("started on" + PORT);
   });
