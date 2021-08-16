@@ -1,4 +1,4 @@
-import { uploadToS3 } from "../../util/imageupload";
+import { uploadToS3 } from "../../util/imageUpload";
 import { createWriteStream } from "fs";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { GraphQLUpload } from "graphql-upload";
