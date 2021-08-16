@@ -40,12 +40,13 @@ export class BookImage {
         uploadMetaData = await uploadToS3(readStream, filename);
         const manager = getManager();
         const foundBook = await manager.findOne(Book, bookId);
-        manager.create(BookImages, {
+        const createdBookImage = manager.create(BookImages, {
           bookId: foundBook,
           imageUrl: uploadMetaData.Location,
           key: uploadMetaData.Key,
           localImageUrl,
         });
+        await manager.save(createdBookImage);
         return true;
       } catch (err) {
         throw new Error("could not upload image.");
