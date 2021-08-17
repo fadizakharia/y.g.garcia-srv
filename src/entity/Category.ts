@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
+import { Character } from "./Character";
 @ObjectType()
 @Entity()
 export class Category {
@@ -10,4 +11,8 @@ export class Category {
   @Field(() => String)
   @Column({ type: "text" })
   title: string;
+
+  @Field(() => [Character])
+  @OneToMany(() => Character, (ch) => ch.category)
+  characters: Character[];
 }
