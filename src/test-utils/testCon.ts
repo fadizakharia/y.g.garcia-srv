@@ -8,7 +8,7 @@ export const testCon = (drop: boolean = false) =>
     username: "fadizakharia",
     password: "doomknight123.",
     database: "nomar_test",
-    synchronize: true,
+    synchronize: drop,
     dropSchema: drop,
     entities: ["src/Entity/*.ts"],
     migrations: ["database/migrations/**/*.ts"],

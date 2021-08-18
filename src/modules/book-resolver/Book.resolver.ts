@@ -6,9 +6,9 @@ import { Book } from "../../entity/Book";
 import Context from "../../types/context";
 import { BookResponse } from "./book-response/BookResponse";
 import { BooksResponse } from "./books-response/BooksResponse";
-import { CreateBookInput } from "./create-book/CreateBookInput";
+import { CreateBookInput } from "./create-book/input";
 import { createBookValidator } from "./create-book/validation";
-import { UpdateBookInput } from "./update-book/UpdateBookInput";
+import { UpdateBookInput } from "./update-book/input";
 import { updateBookValidator } from "./update-book/validation";
 
 @Resolver()

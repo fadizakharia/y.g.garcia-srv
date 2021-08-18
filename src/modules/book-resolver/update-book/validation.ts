@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const updateBookValidator = yup.object().shape({
-  id: yup.string().optional(),
+  id: yup.string().uuid("Invalid Id!"),
   body: yup.string().optional().min(25),
   header: yup.string().optional().min(5),
   status: yup.number().optional().min(0).max(2),

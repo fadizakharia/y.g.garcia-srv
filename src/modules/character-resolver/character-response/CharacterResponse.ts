@@ -4,9 +4,9 @@ import { FieldError } from "../../../util/FieldError";
 
 @ObjectType()
 export class CharacterResponse {
-  @Field(() => Character)
+  @Field(() => Character, { nullable: true })
   character?: Character;
 
-  @Field(() => [FieldError])
+  @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 }

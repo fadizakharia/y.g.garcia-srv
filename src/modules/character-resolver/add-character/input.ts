@@ -17,6 +17,6 @@ export class AddCharacterInput {
   @Field(() => String)
   bio: string;
 
-  @Field(() => Date)
-  date_of_birth: Date;
+  @Field(() => String)
+  date_of_birth: string;
 }

@@ -20,6 +20,18 @@ export class Character {
 
   @Field(() => String)
   @Column({ type: "text" })
+  gender: string;
+
+  @Field(() => String)
+  @Column({ type: "text" })
+  color: string;
+
+  @Field(() => String)
+  @Column({ type: "text" })
+  ethnicity: string;
+
+  @Field(() => String)
+  @Column({ type: "text" })
   bio: string;
 
   @Field(() => Date)

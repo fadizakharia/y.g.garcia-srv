@@ -1,8 +1,8 @@
-import { Connection } from "typeorm";
+import { Connection, getConnection } from "typeorm";
 import faker from "faker";
 import { gqlRequest } from "../../test-utils/graphqlCall";
 import { createBook } from "../../test-utils/shared";
-import { testCon } from "../../test-utils/testCon";
+// import { testCon } from "../../test-utils/testCon";
 
 const createBookMutation = `
 mutation addBook($createBookAddBookInput: CreateBookInput!){
@@ -47,7 +47,7 @@ mutation deleteBook($bookId: String!){
 let conn: Connection;
 
 beforeAll(async () => {
-  conn = await testCon(true);
+  conn = getConnection();
 });
 
 describe("test suit for adding books", () => {
@@ -87,12 +87,12 @@ describe("test suit for updating books", () => {
     const res = await gqlRequest(updateBookMutation, {
       updateBookInput: {
         id: originalBook.id,
-        body: faker.lorem.paragraph(),
-        header: faker.lorem.paragraph(),
-        warning_message: faker.lorem.lines(1),
+        body: faker.lorem.paragraph(2),
+        header: faker.lorem.paragraph(2),
+        warning_message: faker.lorem.words(5),
       },
     });
-    console.log(res.data.updateBook.Book);
+    console.log(res.data.updateBook.errors);
 
     expect(res.data.updateBook.Book).not.toMatchObject(originalBook);
   });
@@ -125,7 +125,4 @@ describe("test suit for deleting books", () => {
       "could not find the requested book!"
     );
   });
-});
-afterAll(async () => {
-  await conn.close();
 });
