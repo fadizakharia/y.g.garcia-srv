@@ -1,20 +1,29 @@
 import { uploadToS3 } from "../../util/imageUpload";
 import { createWriteStream } from "fs";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { GraphQLUpload } from "graphql-upload";
 import { file } from "../../types/file";
 import { ManagedUpload } from "aws-sdk/clients/s3";
 import { getManager } from "typeorm";
 import { BookImages } from "../../entity/BookImages";
 import { Book } from "../../entity/Book";
+import * as yup from "yup";
+import { bookImageResponse } from "./BookImagesResponse/BookImagesResponse";
 
 @Resolver()
 export class BookImage {
   @Query(() => String)
-  async getImage(@Arg("key") key: string): Promise<String> {
-    return key;
+  async getImage(@Arg("bookId") bookId: string): Promise<bookImageResponse> {
+    const idValidity = await yup.string().uuid().isValid(bookId);
+    if (!idValidity) {
+      return { errors: [{ field: "bookId", message: "bookId is incorrect!" }] };
+    }
+    const manager = getManager();
+    const book = await manager.findOne(Book, bookId, { relations: ["images"] });
+    console.log(book.images);
+    return { images: book.images as BookImages[] };
   }
-  // @Authorized(["add:book"])
+  @Authorized(["add:book"])
   @Mutation(() => Boolean)
   async addImage(
     @Arg("image", () => GraphQLUpload)

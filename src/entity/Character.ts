@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { Category } from "./Category";
+import { CharacterImages } from "./CharacterImages";
 @ObjectType()
 @Entity()
 export class Character {
@@ -37,10 +39,11 @@ export class Character {
   @Field(() => Date)
   @Column({ type: "date" })
   date_of_birth: Date;
+  @Field(() => [CharacterImages])
+  @OneToMany(() => CharacterImages, (charImage) => charImage.charId)
+  images: CharacterImages[];
 
-  @ManyToOne(() => Category, (cat) => cat.characters, {
-    cascade: ["insert", "update"],
-  })
+  @ManyToOne(() => Category, (cat) => cat.characters, {})
   @JoinColumn()
   category: Category;
 }

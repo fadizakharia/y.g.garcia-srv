@@ -13,6 +13,9 @@ export class Category {
   title: string;
 
   @Field(() => [Character])
-  @OneToMany(() => Character, (ch) => ch.category)
+  @OneToMany(() => Character, (ch) => ch.category, {
+    cascade: ["insert", "update"],
+    eager: true,
+  })
   characters: Character[];
 }
