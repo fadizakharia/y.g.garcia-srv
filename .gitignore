@@ -1,7 +1,9 @@
-node_modules
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
 .env
-ormconfig.json
-yarn.lock
-yarn-error.log
-src/database
-public
+dist
+pgdata

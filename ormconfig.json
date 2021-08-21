@@ -1,0 +1,17 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "fadizakharia",
+  "password": "doomknight123.",
+  "database": "nomar",
+  "synchronize": true,
+  "entities": ["src/entity/*.ts"],
+  "migrations": ["database/migrations/**/*"],
+  "subscribers": ["src/subscriber/**/*"],
+  "cli": {
+    "entitiesDir": "src/Entity",
+    "migrationsDir": "database/migrations",
+    "subscribersDir": "src/subscriber"
+  }
+}

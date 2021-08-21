@@ -1,5 +1,5 @@
 import { AuthChecker } from "type-graphql";
-import Context from "../types/Context";
+import Context from "../types/context";
 import isTokenValid from "./validate";
 export const customAuthChecker: AuthChecker<Context> = async (
   { context },

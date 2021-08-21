@@ -1,3 +1,3 @@
-import { testCon } from "./testcon";
+import { testCon } from "./testCon";
 
 testCon(false).then(() => process.exit());

@@ -2,13 +2,14 @@ import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { getManager } from "typeorm";
 import { ValidationError } from "yup";
 import { Character } from "../../entity/Character";
-import Context from "../../types/Context";
+import Context from "../../types/context";
 import { AddCharacterInput } from "./add-character/input";
 import { addCharacterValidator } from "./add-character/validation";
 import { CharacterResponse } from "./character-response/CharacterResponse";
 import { UpdateCharacterInput } from "./update-character/input";
 import { updateCharacterValidator } from "./update-character/validation";
 import moment from "moment";
+import { idValidation } from "./delete-character/validation";
 @Resolver()
 export class CharacterResolver {
   @Query(() => String)
@@ -53,6 +54,7 @@ export class CharacterResolver {
       throw new Error("something went wrong!");
     }
   }
+  @Authorized(["update:character"])
   @Mutation(() => CharacterResponse)
   async updateCharacter(
     @Arg("updateCharacterInput") arg: UpdateCharacterInput
@@ -79,7 +81,10 @@ export class CharacterResolver {
       const manager = getManager();
       const foundCharacter = await manager.findOne(Character, arg.id);
       if (foundCharacter) {
-        Object.assign(foundCharacter, { ...arg });
+        Object.assign(foundCharacter, {
+          ...arg,
+          date_of_birth: moment(arg.date_of_birth).toDate(),
+        });
         const updatedCharacter = await manager.save(foundCharacter);
         return { character: updatedCharacter };
       } else {
@@ -87,6 +92,25 @@ export class CharacterResolver {
       }
     } catch (err) {
       throw new Error("Something went wrong! please try again later.");
+    }
+  }
+  @Authorized(["delete:character"])
+  @Mutation(() => Boolean)
+  async deleteCharacter(@Arg("id") id: string): Promise<Boolean> {
+    const valid = await idValidation.isValid(id);
+    if (!valid) {
+      throw new Error("Invalid id!");
+    }
+    try {
+      const manager = getManager();
+      const foundCharacter = await manager.findOne(Character, id);
+      if (!foundCharacter) {
+        throw new Error("could not find character!");
+      }
+      await manager.remove(Character, foundCharacter);
+      return true;
+    } catch (err) {
+      throw new Error("Something went wrong!");
     }
   }
 }

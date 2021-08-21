@@ -42,11 +42,23 @@ mutation updateCharacter($UpdateCharacterInput: UpdateCharacterInput!){
   }
 }
 `;
+const deleteCharacterMutation = `
+mutation deleteCharacter($deleteId:String!){
+  deleteCharacter(id:$deleteId)
+}
+`;
 let conn: Connection;
 
 beforeAll(async () => {
   conn = getConnection();
 });
+describe("test suite for getting characters", () => {
+  it("should get all characters", () => {});
+  // it("should get all characters based on category", () => {});
+  // it("should fail to get characters due to non existant category", () => {});
+  //add after adding category-resolver
+});
+describe("test suite for getting character", () => {});
 describe("test suite for adding character", () => {
   it("should add character", async () => {
     const res = await gqlRequest(addCharacterMutation, {
@@ -110,3 +122,22 @@ describe("test suite for updating characters", () => {
     expect(res.data.updateCharacter.errors.length).toBe(6);
   });
 });
+describe("tests for deleting characters", () => {
+  it("should delete character", async () => {
+    const testCharacter = await createCharacter(conn);
+    const res = await gqlRequest(deleteCharacterMutation, {
+      deleteId: testCharacter.id,
+    });
+    expect(res.data.deleteCharacter).toBeTruthy();
+  });
+  it("should fail to delete character due to a validation error", async () => {
+    const res = await gqlRequest(deleteCharacterMutation, {
+      deleteId: "invalid-id-213123",
+    });
+    expect(res.errors[0].message).toBe("Invalid id!");
+  });
+});
+// describe("tests for adding character to category", () => {
+
+// });
+//add after category-resolver
