@@ -1,13 +1,18 @@
-import { Connection } from "typeorm";
-import { testCon } from "./testCon";
+import { createConnection } from "typeorm";
+// import { Connection } from "typeorm";
+// import { testCon } from "./testCon";
 require("events").EventEmitter.defaultMaxListeners = 0;
-let conn: Connection;
-beforeAll(async () => {
-  conn = await testCon(true);
-});
+// import { testCon } from "./testCon";
 
-afterAll(async () => {
-  if (conn) {
-    await conn.close();
-  }
-});
+createConnection("test").then(() => process.exit());
+
+// let conn: Connection;
+// beforeAll(async () => {
+//   // conn = await testCon();
+// });
+
+// afterAll(async () => {
+//   // if (conn) {
+//   //   await conn.close();
+//   // }
+// });

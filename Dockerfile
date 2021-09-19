@@ -10,7 +10,6 @@ FROM node
 WORKDIR /usr/app
 COPY package.json ./
 RUN npm install
-
 COPY --from=builder /usr/app/dist ./dist
 
 COPY ormconfig.docker.json ./ormconfig.json

@@ -1,17 +1,33 @@
-{
+[{
   "type": "postgres",
   "host": "localhost",
+  "name":"default",
   "port": 5432,
   "username": "fadizakharia",
   "password": "doomknight123.",
   "database": "nomar",
-  "synchronize": true,
-  "entities": ["src/entity/*.ts"],
-  "migrations": ["database/migrations/**/*"],
-  "subscribers": ["src/subscriber/**/*"],
+  "entities": ["src/entity/**/*.ts"],
+  "migrations": ["database/migrations/*"],
+  "synchronize":true,
   "cli": {
-    "entitiesDir": "src/Entity",
-    "migrationsDir": "database/migrations",
-    "subscribersDir": "src/subscriber"
+    "entitiesDir": "src/entity/*.ts",
+    "migrationsDir": "database/migrations"
   }
-}
+},{ "type": "postgres",
+"host": "localhost",
+"port": 5432,
+"name": "test",
+"username": "fadizakharia",
+"password": "doomknight123.",
+"database": "nomar_test",
+"synchronize": true,
+"entities": [
+  ["src/entity/**/*.ts"]
+],
+"migrations": ["database/migrations/**/*.ts"],
+"subscribers": ["src/subscriber/**/*.ts"],
+"cli": {
+  "entitiesDir": "src/entity",
+  "migrationsDir": "database/migrations",
+  "subscribersDir": "src/subscriber"
+}}]

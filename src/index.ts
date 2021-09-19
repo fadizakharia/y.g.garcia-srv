@@ -6,7 +6,7 @@ import { json } from "body-parser";
 import * as dotenv from "dotenv";
 // const corsOption = { origin: "http://localhost:3000", credentials: true };
 import { createSchema } from "./util/buildSchema";
-import { Connection, createConnection } from "typeorm";
+import { createConnection } from "typeorm";
 import { graphqlUploadExpress } from "graphql-upload";
 
 // import tokenValidator from "./util/tokenValidator";
@@ -15,11 +15,13 @@ dotenv.config();
 const main = async () => {
   const PORT = process.env.PORT || 5000;
   const app: Express = express();
-  let connection: Connection;
+
   let retries = 5;
   while (retries) {
     try {
-      connection = await createConnection();
+      await createConnection(
+        process.env.NODE_ENV === "development" ? "test" : "default"
+      );
       break;
     } catch (err) {
       console.log(err);
@@ -38,14 +40,14 @@ const main = async () => {
       const context = {
         req,
         res,
-        connection,
       };
       return context;
     },
+    introspection: true,
   });
 
   await apolloServer.start();
-  app.use(cors());
+  app.use(cors({ credentials: true }));
   app.use("/graphql", json());
   app.use(graphqlUploadExpress({ maxFileSize: 10000000 }));
   apolloServer.applyMiddleware({

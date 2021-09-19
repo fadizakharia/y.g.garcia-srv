@@ -1,3 +1,5 @@
-import { testCon } from "./testCon";
+// import { testCon } from "./testCon";
 
-testCon(false).then(() => process.exit());
+import { createConnection } from "typeorm";
+
+createConnection().then(() => process.exit());

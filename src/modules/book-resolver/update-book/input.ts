@@ -16,4 +16,6 @@ export class UpdateBookInput {
   title?: string;
   @Field(() => String, { nullable: true })
   warning_message?: string;
+  @Field(() => [String], { nullable: true })
+  genres?: string[];
 }

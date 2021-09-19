@@ -2,6 +2,9 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class AddCharacterInput {
+  @Field(() => String, { nullable: true })
+  category?: string;
+
   @Field(() => String)
   name: string;
 

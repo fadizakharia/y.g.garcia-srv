@@ -1,5 +1,4 @@
 import { Field, InputType } from "type-graphql";
-
 @InputType()
 export class CreateBookInput {
   @Field(() => String)
@@ -14,4 +13,6 @@ export class CreateBookInput {
   title: string;
   @Field(() => String)
   warning_message: string;
+  @Field(() => [String])
+  genres: string[];
 }

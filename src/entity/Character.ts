@@ -36,14 +36,22 @@ export class Character {
   @Column({ type: "text" })
   bio: string;
 
-  @Field(() => Date)
+  @Field(() => String)
   @Column({ type: "date" })
-  date_of_birth: Date;
-  @Field(() => [CharacterImages])
-  @OneToMany(() => CharacterImages, (charImage) => charImage.charId)
+  date_of_birth: string;
+
+  @Field(() => [CharacterImages], { nullable: true })
+  @OneToMany(() => CharacterImages, (charImage) => charImage.charId, {
+    cascade: true,
+    nullable: true,
+  })
   images: CharacterImages[];
 
-  @ManyToOne(() => Category, (cat) => cat.characters, {})
+  @Field(() => Category, { nullable: true })
+  @ManyToOne(() => Category, (cat) => cat.characters, {
+    cascade: true,
+    nullable: true,
+  })
   @JoinColumn()
   category: Category;
 }

@@ -50,7 +50,7 @@ mutation deleteCharacter($deleteId:String!){
 let conn: Connection;
 
 beforeAll(async () => {
-  conn = getConnection();
+  conn = getConnection("test");
 });
 describe("test suite for getting characters", () => {
   it("should get all characters", () => {});
@@ -71,8 +71,8 @@ describe("test suite for adding character", () => {
         color: "golden",
       },
     });
-
-    expect(res.data.createCharacter.character).toBeDefined();
+    console.log(res.data!);
+    expect(res.data!.createCharacter.character).toBeDefined();
   });
   it("should fail to add character due to validation", async () => {
     const res = await gqlRequest(addCharacterMutation, {
@@ -86,7 +86,7 @@ describe("test suite for adding character", () => {
       },
     });
 
-    expect(res.data.createCharacter.errors.length).toBe(6);
+    expect(res.data!.createCharacter.errors.length).toBe(6);
   });
 });
 describe("test suite for updating characters", () => {
@@ -103,7 +103,9 @@ describe("test suite for updating characters", () => {
         color: faker.lorem.word(8),
       },
     });
-    expect(res.data.updateCharacter.character).toBeDefined();
+    console.log(res.errors);
+
+    expect(res.data!.updateCharacter.character).toBeDefined();
   });
   it("should fail to update character due to validation", async () => {
     const testCharacter = await createCharacter(conn);
@@ -119,16 +121,18 @@ describe("test suite for updating characters", () => {
       },
     });
 
-    expect(res.data.updateCharacter.errors.length).toBe(6);
+    expect(res.data!.updateCharacter.errors.length).toBe(6);
   });
 });
 describe("tests for deleting characters", () => {
   it("should delete character", async () => {
     const testCharacter = await createCharacter(conn);
+
     const res = await gqlRequest(deleteCharacterMutation, {
       deleteId: testCharacter.id,
     });
-    expect(res.data.deleteCharacter).toBeTruthy();
+    console.log(res.errors);
+    expect(res.data!.deleteCharacter).toBeTruthy();
   });
   it("should fail to delete character due to a validation error", async () => {
     const res = await gqlRequest(deleteCharacterMutation, {

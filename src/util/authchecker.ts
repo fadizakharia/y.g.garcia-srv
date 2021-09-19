@@ -7,12 +7,16 @@ export const customAuthChecker: AuthChecker<Context> = async (
 ) => {
   let validity: boolean = false;
   if (context.req.headers["authorization"]) {
-    const token = context.req.headers["authorization"]?.split(" ")[1];
+    const token = context.req.headers["authorization"];
+
     const decodedToken = (await isTokenValid(token)) as any;
+
     if (decodedToken) {
       if (permissions && permissions.length > 0) {
         permissions.forEach((r) => {
-          if (!decodedToken.permissions.includes(r)) {
+          if (decodedToken.decoded.permissions.includes(r)) {
+            validity = true;
+          } else {
             validity = false;
           }
         });

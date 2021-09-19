@@ -1,14 +1,7 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { BookImages } from "./BookImages";
-import { Genre } from "./Genre";
+
 import { PurchaseOption } from "./PurchaseOption";
 @ObjectType()
 @Entity()
@@ -42,15 +35,18 @@ export class Book {
   warning_message: string;
 
   @Field(() => [BookImages])
-  @OneToMany(() => BookImages, (imgs) => imgs.bookId)
+  @OneToMany(() => BookImages, (imgs) => imgs.bookId, {
+    onDelete: "CASCADE",
+  })
   images: BookImages[];
 
   @Field(() => [PurchaseOption])
-  @OneToMany(() => PurchaseOption, (opts) => opts.Book)
+  @OneToMany(() => PurchaseOption, (opts) => opts.Book, {
+    cascade: ["remove", "update", "insert"],
+  })
   purchase_options: PurchaseOption[];
 
-  @Field(() => [Genre])
-  @ManyToMany(() => Genre)
-  @JoinTable()
-  genres: Genre[];
+  @Field(() => String, { nullable: true })
+  @Column({ type: "text", nullable: true })
+  genres: string;
 }

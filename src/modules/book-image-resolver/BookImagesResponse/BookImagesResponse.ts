@@ -5,7 +5,7 @@ import { FieldError } from "../../../util/FieldError";
 @ObjectType()
 export class bookImageResponse {
   @Field(() => [Image], { nullable: true })
-  images?: BookImages[];
+  images?: BookImages;
 
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];

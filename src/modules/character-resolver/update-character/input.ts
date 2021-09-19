@@ -6,6 +6,9 @@ export class UpdateCharacterInput {
   id: string;
 
   @Field(() => String, { nullable: true })
+  category?: string;
+
+  @Field(() => String, { nullable: true })
   name?: string;
 
   @Field(() => String, { nullable: true })

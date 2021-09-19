@@ -10,6 +10,7 @@ export const createBook = async (conn: Connection) => {
     title: "The fibo",
     subtitle: "great book must read",
     warning_message: "parental advisory required",
+    genres: "one, two, three",
   });
   return await conn.manager.save(testBook);
 };

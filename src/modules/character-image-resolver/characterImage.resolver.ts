@@ -1,17 +1,17 @@
 import { ManagedUpload } from "aws-sdk/clients/s3";
 import { createWriteStream } from "fs";
 import { GraphQLUpload } from "graphql-upload";
-import { Resolver, Arg, Query, Mutation } from "type-graphql";
+import { Resolver, Arg, Query, Mutation, Authorized } from "type-graphql";
 import { getManager } from "typeorm";
 import * as yup from "yup";
 import { Character } from "../../entity/Character";
 import { CharacterImages } from "../../entity/CharacterImages";
 import { file } from "../../types/file";
 import { CharacterImageResponse } from "./CharacterImageResponse/CharacterImageResponse";
-import { uploadToS3 } from "../../util/imageUpload";
+import { deleteFromS3, uploadToS3 } from "../../util/imageUpload";
 @Resolver()
 export class CharacterImageResolver {
-  @Query()
+  @Query(() => CharacterImageResponse)
   async getCharacterImages(
     @Arg("characterId") charId: string
   ): Promise<CharacterImageResponse> {
@@ -26,7 +26,7 @@ export class CharacterImageResolver {
     console.log(foundCharacter.images);
     return { images: foundCharacter.images as CharacterImages[] };
   }
-  @Mutation()
+  @Mutation(() => Boolean)
   async addCharacterImage(
     @Arg("image", () => GraphQLUpload)
     { filename, createReadStream }: file,
@@ -69,6 +69,27 @@ export class CharacterImageResolver {
       }
     } else {
       throw new Error("could not upload image.");
+    }
+  }
+  @Authorized(["delete:character"])
+  @Mutation(() => Boolean)
+  async deleteCharacterImage(
+    @Arg("imageId") imageId: string
+  ): Promise<Boolean> {
+    try {
+      const manager = getManager();
+      const foundImage = await manager.findOne(CharacterImages, imageId);
+      if (foundImage) {
+        const Key = foundImage.key;
+        const Bucket = process.env.AWS_S3_BUCKET_NAME;
+
+        await deleteFromS3({ Key, Bucket });
+        await manager.remove(foundImage);
+        return true;
+      }
+      throw new Error("could not find image");
+    } catch (err) {
+      throw new Error(err);
     }
   }
 }

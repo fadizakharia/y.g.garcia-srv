@@ -15,9 +15,7 @@ export class BookImages {
   id: String;
 
   @Field(() => Book)
-  @ManyToOne(() => Book, (book) => book.images, {
-    cascade: ["insert", "update"],
-  })
+  @ManyToOne(() => Book, (book) => book.images)
   @JoinColumn({ name: "book_id" })
   bookId: Book;
 
