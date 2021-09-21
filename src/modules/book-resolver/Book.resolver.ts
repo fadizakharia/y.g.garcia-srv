@@ -49,7 +49,11 @@ export class BookResolver {
     @Ctx() _: Context
   ): Promise<BookResponse> {
     try {
-      const foundBook = await getManager().findOneOrFail(Book, { id });
+      const foundBook = await getManager().findOneOrFail(
+        Book,
+        { id },
+        { relations: ["purchase_options", "images"] }
+      );
       if (foundBook) {
         return { Book: foundBook };
       } else {

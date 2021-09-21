@@ -47,7 +47,11 @@ const main = async () => {
   });
 
   await apolloServer.start();
-  app.use(cors({ credentials: true }));
+  app.use(
+    cors({
+      credentials: true,
+    })
+  );
   app.use("/graphql", json());
   app.use(graphqlUploadExpress({ maxFileSize: 10000000 }));
   apolloServer.applyMiddleware({
